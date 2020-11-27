@@ -1,42 +1,39 @@
 import React, { useState } from "react";
-import {
-  TextInput,
-  Button,
-  StyleSheet,
-  SafeAreaView,
-  Modal,
-  View,
-} from "react-native";
+import { View, TextInput, Button, StyleSheet, Modal } from "react-native";
 
-function GoalInput(props) {
+const GoalInput = (props) => {
   const [enteredGoal, setEnteredGoal] = useState("");
 
-  function goalInputHandler(enteredText) {
+  const goalInputHandler = (enteredText) => {
     setEnteredGoal(enteredText);
-  }
+  };
 
-  function addGoalHandler() {
-    props.handleAdd(enteredGoal);
+  const addGoalHandler = () => {
+    props.onAddGoal(enteredGoal);
     setEnteredGoal("");
-  }
+  };
 
   return (
     <Modal visible={props.visible} animationType="slide">
-      <SafeAreaView style={styles.inputContainer}>
+      <View style={styles.inputContainer}>
         <TextInput
+          placeholder="Goal"
           style={styles.input}
-          placeholder="Course Goal"
-          value={enteredGoal}
           onChangeText={goalInputHandler}
+          value={enteredGoal}
         />
         <View style={styles.buttonContainer}>
-          <Button title="ADD" onPress={addGoalHandler} />
-          <Button title="CANCEL" onPress={props.handleCancel} color="red" />
+          <View style={styles.button}>
+            <Button title="CANCEL" color="red" onPress={props.onCancel} />
+          </View>
+          <View style={styles.button}>
+            <Button title="ADD" onPress={addGoalHandler} />
+          </View>
         </View>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
-}
+};
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -49,10 +46,16 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     padding: 10,
+    marginBottom: 10,
   },
   buttonContainer: {
     flexDirection: "row",
-    margin: 10,
+    justifyContent: "space-around",
+    width: "60%",
+  },
+  button: {
+    width: "40%",
   },
 });
+
 export default GoalInput;

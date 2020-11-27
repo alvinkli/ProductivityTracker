@@ -1,55 +1,47 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  SafeAreaView,
-  Button,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import { StyleSheet, View, Button, FlatList } from "react-native";
 
 import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
 
 export default function App() {
-  const [courseGoals, setCourseGoals] = useState([]);
+  const [Goals, Work] = useState([]);
   const [isAddMode, setIsAddMode] = useState(false);
 
-  function addGoalHandler(goalTitle) {
-    setCourseGoals((currentGoals) => [
+  const addGoalHandler = (goalTitle) => {
+    Work((currentGoals) => [
       ...currentGoals,
-      { key: Math.random().toString(), value: goalTitle },
+      { id: Math.random().toString(), value: goalTitle },
     ]);
     setIsAddMode(false);
-  }
+  };
 
-  function cancelInputHandler() {
-    setIsAddMode(false);
-  }
-
-  function removeGoalHandler(goalKey) {
-    setCourseGoals((currentGoals) => {
-      return currentGoals.filter((goal) => goal.key !== goalKey);
+  const removeGoalHandler = (goalId) => {
+    Work((currentGoals) => {
+      return currentGoals.filter((goal) => goal.id !== goalId);
     });
-  }
+  };
+
+  const cancelGoalAdditionHandler = () => {
+    setIsAddMode(false);
+  };
 
   return (
     <View style={styles.screen}>
-      <Button title="Add new goal" onPress={() => setIsAddMode(true)} />
+      <Button title="Add New Goal" onPress={() => setIsAddMode(true)} />
       <GoalInput
         visible={isAddMode}
-        handleAdd={addGoalHandler}
-        handleCancel={cancelInputHandler}
+        onAddGoal={addGoalHandler}
+        onCancel={cancelGoalAdditionHandler}
       />
       <FlatList
-        data={courseGoals}
+        keyExtractor={(item, index) => item.id}
+        data={Goals}
         renderItem={(itemData) => (
           <GoalItem
-            id={itemData.item.key}
-            title={itemData.item.value}
+            id={itemData.item.id}
             onDelete={removeGoalHandler}
+            title={itemData.item.value}
           />
         )}
       />
@@ -58,16 +50,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  screen: { padding: 40 },
-  inputContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    margin: 20,
-  },
-  input: {
-    width: "80%",
-    borderColor: "black",
-    borderWidth: 1,
-    padding: 10,
+  screen: {
+    padding: 50,
   },
 });
